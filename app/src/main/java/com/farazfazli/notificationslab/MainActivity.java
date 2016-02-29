@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setContentIntent(pendingIntent);
         Notification notification = builder.build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
         notificationManager.notify(1, notification);
     }
 }
