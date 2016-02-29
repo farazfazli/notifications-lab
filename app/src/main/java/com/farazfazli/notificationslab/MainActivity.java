@@ -23,18 +23,16 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this);
         NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
-        if (activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting()) {
-            builder.setSmallIcon(R.drawable.icon);
-        } else {
-            builder.setSmallIcon(android.R.drawable.ic_menu_close_clear_cancel);
-
-        }
+        boolean isConnected = activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+        builder.setSmallIcon( isConnected ? R.drawable.icon : android.R.drawable.ic_menu_close_clear_cancel );
         Intent intent = new Intent(MainActivity.this, SecondActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 12, intent, 0);
         builder.setContentIntent(pendingIntent);
         Notification notification = builder.build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        if (isConnected) {
+            notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        }
         notificationManager.notify(1, notification);
     }
 }
