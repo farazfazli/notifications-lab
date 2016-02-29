@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
@@ -21,14 +22,14 @@ public class MainActivity extends AppCompatActivity {
     public void showNotification(View view) {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this);
-        Intent intent;
-        if (manager.getActiveNetworkInfo() != null) {
+        NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting()) {
             builder.setSmallIcon(R.drawable.icon);
-            intent = new Intent(MainActivity.this, MainActivity.class);
         } else {
             builder.setSmallIcon(android.R.drawable.ic_menu_close_clear_cancel);
-            intent = new Intent(MainActivity.this, SecondActivity.class);
+
         }
+        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 12, intent, 0);
         builder.setContentIntent(pendingIntent);
         Notification notification = builder.build();
